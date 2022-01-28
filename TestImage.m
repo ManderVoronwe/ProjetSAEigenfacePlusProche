@@ -15,26 +15,32 @@ im = imread(File2Test);
 
 [m, A, Eigenfaces] = EigenfaceCore(T); %Generating characteristic quantity
 Threshold = 500;
-OutputIndex = Recognition(File2Test, m, A, Eigenfaces, Threshold);
+Nimages = 3;
+OutputIndex = Recognition(File2Test, m, A, Eigenfaces, Threshold, Nimages);
 % Select the picture you want to recognize
 % SelectedImage = strcat(TrainDatabasePath,'\',list{OutputIndex});
 % Select the picture you want to recognize
-if OutputIndex ~= 0
-    SelectedImage = strcat(TrainDatabasePath,'\',list{OutputIndex});
-    SelectedImage = imread(SelectedImage);
+if ~isempty(OutputIndex)
+    
     % display picture
+    figure
     imshow(im)                   %Display the original picture of the picture to be tested
 
     title(strcat('Original picture: ', filename));  
     figure,
     % im1=rgb2gray(im);
     imshow(im);                 %Display the gray scale of the picture to be tested
-    title(strcat('The gray scale of the picture: ', filename));  
-    figure,imshow(SelectedImage);%Show matching pictures
-    title(strcat('Equivalent Image: ', list{OutputIndex}));
-
-    str = strcat('Matched image is :  ',list{OutputIndex});
-    disp(str)
+    title(strcat('The gray scale of the picture: ', filename));
+    
+    % Output
+    for i = 1:length(OutputIndex)
+        SelectedImage = strcat(TrainDatabasePath,'\',list{OutputIndex(i)});
+        SelectedImage = imread(SelectedImage);
+        figure,imshow(SelectedImage);%Show matching pictures
+        title(strcat('Equivalent Image: ', list{OutputIndex(i)}));
+        str = strcat('Matched image is :  ',list{OutputIndex(i)});
+        disp(str)
+    end
 
 else
     str = strcat('Image not found');

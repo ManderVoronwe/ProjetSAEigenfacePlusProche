@@ -1,4 +1,4 @@
-function Recognized_index = Recognition(TestImage, m, A, Eigenfaces, Threshold)
+function Recognized_index = Recognition(TestImage, m, A, Eigenfaces, Threshold, Nimages)
 %This function compares two faces by projecting the image into the face space, and then measures the Euclidean distance between them.
 %             TestImage                 - Path of the picture to be detected
 %
@@ -40,10 +40,20 @@ ProjectedImages = [];
         temp = ( norm( ProjectedTestImage/1e7 - q ) )^2;
         Euc_dist = [Euc_dist temp];
     end
-    e = min(Euc_dist)
-    [minValue,Recognized_index] = min(Euc_dist);
     
- if minValue > Threshold
-     Recognized_index = 0;
- end
+%     e = min(Euc_dist)
+%     [minValue,Recognized_index] = min(Euc_dist);
+%     
+%  if minValue > Threshold
+%      Recognized_index = 0;
+%  end
 %  OutputName = strcat(int2str(Recognized_index),'.pgm');
+
+% Find Nimages minimum distances
+[xs, index] = mink(Euc_dist,Nimages);
+Recognized_index = [];
+for i = 1:length(index)
+    if xs(i) <= Threshold
+        Recognized_index = [Recognized_index index(i)];
+    end
+end
